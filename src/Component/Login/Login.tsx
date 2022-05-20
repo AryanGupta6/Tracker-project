@@ -42,6 +42,9 @@ const Login = () => {
         navigate('/');
       });
   };
+  if (localStorage.getItem('isAuth') === 'true') {
+    window.location.href = '/dashboard';
+  }
   return (
     <div className={classes.login}>
       <div className={classes.sidebar}>
