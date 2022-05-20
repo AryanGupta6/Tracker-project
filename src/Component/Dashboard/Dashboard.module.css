@@ -34,7 +34,7 @@
   border-bottom: 1px solid #000;
 }
 .sidebar {
-  width: 20%;
+  width: 15%;
   height: 100vh;
   background: #1d262d;
   padding-top: 5%;
@@ -54,9 +54,10 @@
   margin-top: 5%;
 }
 .sideImg {
-  height: 50px;
-  width: 200px;
+  height: 4%;
+  width: 80%;
   margin: 0 auto;
+  margin-top: -15%;
   display: flex;
 }
 .link-div {
