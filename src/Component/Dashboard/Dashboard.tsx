@@ -5,7 +5,7 @@ import Tracker from '../../assests/images/Icon.png';
 import classes from './Dashboard.module.css';
 import { Link } from 'react-router-dom';
 import EmptyProject from '../EmptyProject/EmptyProject';
-import IssueCards from '../IssueCard/IssueCards';
+import IssueCards from '../IssuePanel/IssuePanel';
 import { useTranslation } from 'react-i18next';
 import Language from '../Language/Language';
 
@@ -55,8 +55,6 @@ const Dashboard = () => {
     }
     getIssues();
   }, [project]);
-
-  //Ths is issue need to be updated
 
   useEffect(() => {
     const assign = [...issues];
@@ -109,7 +107,7 @@ const Dashboard = () => {
                   </select>
                 </div>
                 <div className={classes['input-container']}>
-                  <label htmlFor={classes.select}>{('Project Owner')}</label>
+                  <label htmlFor={classes.select}>{'Project Owner'}</label>
                   <input type="text" className={classes.owner} name="project Owner" value={user} />
                 </div>
               </div>
@@ -119,7 +117,7 @@ const Dashboard = () => {
                     className={classes['filter-container']}
                     onChange={(event) => {
                       setFassign(event.target.value);
-                      console.log(event.target.value,"dfe")
+                      console.log(event.target.value, 'dfe');
                     }}
                     name="Priority">
                     <option selected value="">
@@ -139,9 +137,9 @@ const Dashboard = () => {
                     name="Priority"
                     onChange={(event) => {
                       setFpriority(event.target.value);
-                      console.log(event.target.value,"prioity");
+                      console.log(event.target.value, 'prioity');
                     }}>
-                    <option selected value=''>
+                    <option selected value="">
                       {t('None')}
                     </option>
                     <option value="1">{'LOW'}</option>

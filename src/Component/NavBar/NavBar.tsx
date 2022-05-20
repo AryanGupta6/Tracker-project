@@ -7,13 +7,10 @@ import classes from './NavBar.module.css';
 const NavBar = (props: any) => {
   const dispatch = useDispatch();
   const handleLogout = () => {
-    // localStorage.removeItem('userId');
-    // console.log(Response.data['userId']);
-    // localStorage.setItem('userId', 'false');
     localStorage.removeItem('userId');
-    dispatch(authActions.logout());  
-    window.location.href = '/'; 
-  }
+    dispatch(authActions.logout());
+    window.location.href = '/';
+  };
   return (
     <React.Fragment>
       <div className={classes.header}>
@@ -25,7 +22,7 @@ const NavBar = (props: any) => {
         {!props.flag && <div className={classes.search}></div>}
         <div className={classes.user}>
           <p>Anjali Gupta</p>
-          <img src={logout} alt="" onClick={handleLogout}/>
+          <img src={logout} alt="" onClick={handleLogout} />
         </div>
       </div>
     </React.Fragment>

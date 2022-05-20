@@ -3,7 +3,7 @@ import Card from '../Card/Card';
 import { Issue } from '../Card/Card';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import classes from './IssueCard.module.css';
+import classes from './IssuePanel.module.css';
 
 type Props = {
   list: Issue[];
@@ -38,9 +38,9 @@ const IssueCards = ({ list, filterbypriority, filterbyassignee }: Props) => {
   }, [filterbyassignee]);
   useEffect(() => {
     if (filterbypriority === '') {
-      setFilter1([...filter1]);
+      setFilter1([...list]);
     } else {
-      setFilter1([...list.filter((ele: any) => ele.priority == filterbypriority)]);
+      setFilter1([...filter1.filter((ele: any) => ele.priority == filterbypriority)]);
     }
   }, [filterbypriority]);
   return (
