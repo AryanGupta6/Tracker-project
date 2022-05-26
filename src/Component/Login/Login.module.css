@@ -31,3 +31,20 @@
 .button {
   width: 100%;
 }
+.error-custom {
+  color: red;
+}
+.input-container-login {
+  background-color: #f7f8fa;
+  border: none;
+  border-bottom: 2px solid #777778;
+  padding: 1%;
+  width: 80%;
+}
+
+.login-button-login-page {
+  background-color: #1d262d;
+  width: 80%;
+  padding: 1%;
+  color: #fff;
+}

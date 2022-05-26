@@ -3,19 +3,30 @@ import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Button, Form } from 'react-bootstrap';
 import Tracker from '../../assests/images/Icon.png';
 import SideImg from '../../assests/images/sideImg.png';
 import Language from '../Language/Language';
 import { authActions } from '../../Store/authSlice';
 import classes from './Login.module.css';
+import * as Yup from 'yup';
+import { ErrorMessage, Field, Form, Formik } from 'formik';
 
 const Login = () => {
+  const SignInSchema = Yup.object().shape({
+    email: Yup.string().email().required('Email is required'),
+    password: Yup.string()
+      .required('Password is required')
+      .min(4, 'Password is too short - should be 4 chars minimum')
+  });
+
+  const initialValues = {
+    email: '',
+    password: ''
+  };
+
   const dispatch = useDispatch();
-  // const isAuth = useSelector((state: any) => state.auth.isAuthenticated);
   const { t } = useTranslation();
   const navigate = useNavigate();
-  // const history = useHistory();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const emailHandler = (event: any) => {
@@ -24,24 +35,7 @@ const Login = () => {
   const passwordHandler = (event: any) => {
     setPassword(event.target.value);
   };
-  const onSubmit = (event: any) => {
-    event.preventDefault();
-    axios
-      .post('https://hu-22-angular-mockapi-urtjok3rza-wl.a.run.app/auth/login', {
-        email: email,
-        password: password
-      })
-      .then((response: any) => {
-        console.log(response.data['userId']);
-        localStorage.setItem('userId', response.data['userId']);
-        window.location.href = '/dashboard';
-        dispatch(authActions.login());
-      })
-      .catch((error: any) => {
-        alert(error.response.data['error']);
-        navigate('/');
-      });
-  };
+
   if (localStorage.getItem('isAuth') === 'true') {
     window.location.href = '/dashboard';
   }
@@ -52,25 +46,89 @@ const Login = () => {
         <img src={SideImg} className={classes.tracker} alt="" />
         <Language flag={true} />
       </div>
-      <div className={classes['login_section']}>
-        <Form className={classes.form} onSubmit={onSubmit}>
-          <Form.Group className="mb-3" controlId="formBasicEmail">
-            <Form.Label>{t('Email')}</Form.Label>
-            <Form.Control
-              type="email"
-              placeholder={t('Enter your email address')}
-              onChange={emailHandler}
-            />
-          </Form.Group>
+      <div className={classes.login_section}>
+        <Formik
+          initialValues={initialValues}
+          validationSchema={SignInSchema}
+          onSubmit={(values) => {
+            axios
+              .post('https://hu-22-angular-mockapi-urtjok3rza-wl.a.run.app/auth/login', values)
+              .then((response: any) => {
+                console.log(response);
+                localStorage.setItem('userId', response.data['userId']);
+                window.location.href = '/dashboard';
+                dispatch(authActions.login());
+              })
+              .catch((error: any) => {
+                console.log(error.response.data['error']);
+                navigate('/');
+              });
+          }}>
+          {(formik) => {
+            const { errors, touched, isValid, dirty } = formik;
+            return (
+              <div className="container">
+                <h1 className="mb-5">{t('LOGIN')}</h1>
+                <Form>
+                  <div className="form-row mb-3">
+                    <label htmlFor="email">{t('Email')}</label>
+                    <br />
+                    <Field
+                      type="email"
+                      name="email"
+                      id="email"
+                      placeholder={t('Enter your email address')}
+                      className={
+                        errors.email && touched.email
+                          ? `input-error && ${classes['input-container-login']}`
+                          : `${classes['input-container-login']}`
+                      }
+                    />
+                    <br />
+                    <ErrorMessage
+                      name="email"
+                      component="span"
+                      className={`error ${classes['error-custom']}`}
+                    />
+                  </div>
 
-          <Form.Group className="mb-3" controlId="formBasicPassword">
-            <Form.Label>{t('Password')}</Form.Label>
-            <Form.Control type="password" placeholder="**********" onChange={passwordHandler} />
-          </Form.Group>
-          <Button variant="dark" className={classes.button} type="submit">
-            {t('LOGIN')}
-          </Button>
-        </Form>
+                  <div className="form-row mb-5">
+                    <label htmlFor="password">{t('Password')}</label>
+                    <br />
+                    <Field
+                      type="password"
+                      name="password"
+                      id="password"
+                      placeholder="**********"
+                      className={
+                        errors.password && touched.password
+                          ? `input-error && ${classes['input-container-login']}`
+                          : `${classes['input-container-login']}`
+                      }
+                    />
+                    <br />
+                    <ErrorMessage
+                      name="password"
+                      component="span"
+                      className={`error ${classes['error-custom']}`}
+                    />
+                  </div>
+
+                  <button
+                    type="submit"
+                    className={
+                      !(dirty && isValid)
+                        ? `${classes['disabled-btn']} && ${classes['login-button-login-page']}`
+                        : `${classes['login-button-login-page']}`
+                    }
+                    disabled={!(dirty && isValid)}>
+                    {t('LOGIN')}
+                  </button>
+                </Form>
+              </div>
+            );
+          }}
+        </Formik>
       </div>
     </div>
   );
